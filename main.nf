@@ -32,7 +32,7 @@ bai_files.into {bai_files_msisensor; bai_files_mantis}
 ** MSIsensor **
 ***************/
 
-process run_msisensor{
+process run_mantis{
 
     publishDir params.output_folder
 
@@ -51,27 +51,5 @@ process run_msisensor{
 }
 
 
-/**************
-** MANTIS **
-***************/
 
-process run_mantis{
-
-    publishDir params.output_folder
-
-    input:
-        file tumour_bam from bam_files_mantis
-	file tumour_bai from bai_files_mantis
-        path normal_bam
-        path normal_bai
-	path genome_fa
-	path genome_fa_fai
-        path loci_file_mantis
-    output:
-        file "${tumour_bam.baseName}.mantis" into mantis_outputs
-
-    """
-    python /opt/mantis/mantis.py --bedfile $loci_file_mantis --genome genome_fa -n $normal_bam -t ${tumour_bam} -o ${tumour_bam.baseName}.mantis
-    """
-}
 
