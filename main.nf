@@ -31,6 +31,28 @@ bai_files.into {bai_files_msisensor; bai_files_mantis}
 /**************
 ** MSIsensor **
 ***************/
+process run_msisensor{
+
+    publishDir params.output_folder
+
+    input:
+        file tumour_bam from bam_files_msisensor
+	file tumour_bai from bai_files_msisensor
+        path normal_bam
+        path normal_bai
+        path loci_file_msisensor
+    output:
+        file "${tumour_bam.baseName}.msisensor" into msisensor_outputs
+
+    """
+    msisensor msi -d $loci_file_msisensor -n $normal_bam -t ${tumour_bam} -o ${tumour_bam.baseName}.msisensor
+    """
+}
+
+
+/**************
+** MANTIS **
+***************/
 
 process run_mantis{
 
