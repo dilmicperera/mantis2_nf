@@ -49,7 +49,7 @@ process run_mantis{
         file "${tumour_bam.baseName}.msisensor" into msisensor_outputs
 
     """
-    python3 /opt/mantis/mantis.py --bedfile $loci_file_mantis --genome genome_fa -n $normal_bam -t ${tumour_bam} -o ${tumour_bam.baseName}.mantis
+    python /opt/mantis/mantis.py --bedfile $loci_file_mantis --genome genome_fa -n $normal_bam -t ${tumour_bam} -o ${tumour_bam.baseName}.mantis
     """
 }
 
