@@ -15,6 +15,8 @@ normal_bai = "$projectDir/$params.normal_bai"
 genome_fa = file(params.genome_fa)
 genome_fa_fai = file(params.genome_fa_fai)
 
+combine_outputs  ==  "$projectDir/$params.combine_outputs"
+
 // Read in bam files
 bam_paths = Paths.get(bam_folder,"/DNA*/DNA*[0-9].hardclipped.bam")
 bam_files = Channel.fromPath(bam_paths)
@@ -28,10 +30,13 @@ bai_files = Channel.fromPath(bai_paths)
 bam_files.into {bam_files_msisensor; bam_files_mantis}
 bai_files.into {bai_files_msisensor; bai_files_mantis}
 
+
+
 /**************
 ** MSIsensor **
 ***************/
 process run_msisensor{
+    container 'dilmicperera/msisensor:0.5'
 
     publishDir params.output_folder
 
@@ -55,7 +60,8 @@ process run_msisensor{
 ***************/
 
 process run_mantis{
-
+    container 'dilmicperera/mantis:latest'
+    memory 8.GB
     publishDir params.output_folder
 
     input:
@@ -75,5 +81,21 @@ process run_mantis{
 }
 
 
+/********************
+** Combine Outputs **
+*********************/
 
+process combine_outputs{
+    container "quay.io/biocontainers/pandas:0.24.1"
+    publishDir params.output_folder
+
+    input:
+        file msisensor_output from msisensor_outputs
+        file mantis_output from mantis_outputs
+
+    """
+    python $combine_outputs $msisensor_output $mantis_output $params.output_folder
+    """
+
+}
 
