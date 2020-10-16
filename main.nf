@@ -41,9 +41,9 @@ process run_mantis{
 	file tumour_bai from bai_files_mantis
         path normal_bam
         path normal_bai
-	path genome_fa
-	path genome_fa_fai
-        path loci_file_mantis
+	file genome_fa
+	file genome_fa_fai
+        file loci_file_mantis
     output:
         file "${tumour_bam.baseName}.mantis" into mantis_outputs
 
