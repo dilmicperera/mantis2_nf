@@ -7,6 +7,8 @@ import java.nio.file.Paths
 
 bam_folder="$projectDir/$params.bam_folder"
 loci_file_msisensor = "$projectDir/$params.loci_file_msisensor"
+loci_file_mantis = "$projectDir/$params.loci_file_mantis"
+
 normal_bam = "$projectDir/$params.normal_bam"
 normal_bai = "$projectDir/$params.normal_bai"
 
@@ -40,12 +42,16 @@ process run_mantis{
 	file tumour_bai from bai_files_msisensor
         path normal_bam
         path normal_bai
+	path genome_fa
+	path genome_fa_fai
         path loci_file_msisensor
     output:
         file "${tumour_bam.baseName}.msisensor" into msisensor_outputs
+	file "${tumour_bam.baseName}.fa"
 
     """
     msisensor msi -d $loci_file_msisensor -n $normal_bam -t ${tumour_bam} -o ${tumour_bam.baseName}.msisensor
+    head $genome_fa > ${tumour_bam.baseName}.fa
     """
 }
 
