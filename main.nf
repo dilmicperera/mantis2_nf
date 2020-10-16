@@ -38,20 +38,18 @@ process run_mantis{
     publishDir params.output_folder
 
     input:
-        file tumour_bam from bam_files_msisensor
-	file tumour_bai from bai_files_msisensor
+        file tumour_bam from bam_files_mantis
+	file tumour_bai from bai_files_mantis
         path normal_bam
         path normal_bai
 	path genome_fa
 	path genome_fa_fai
-        path loci_file_msisensor
+        path loci_file_mantis
     output:
         file "${tumour_bam.baseName}.msisensor" into msisensor_outputs
-	file "${tumour_bam.baseName}.fa"
 
     """
-    msisensor msi -d $loci_file_msisensor -n $normal_bam -t ${tumour_bam} -o ${tumour_bam.baseName}.msisensor
-    head $genome_fa > ${tumour_bam.baseName}.fa
+    python3 /opt/mantis/mantis.py --bedfile $loci_file_mantis --genome genome_fa -n $normal_bam -t ${tumour_bam} -o ${tumour_bam.baseName}.mantis
     """
 }
 
