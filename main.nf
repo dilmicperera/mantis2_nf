@@ -48,7 +48,7 @@ process run_mantis{
         file "${tumour_bam.baseName}.mantis" into mantis_outputs
 
     """
-    python /opt/mantis/mantis.py --bedfile $loci_file_mantis --genome genome_fa -n $normal_bam -t ${tumour_bam} -o ${tumour_bam.baseName}.mantis
+    python /opt/mantis/mantis.py --bedfile $loci_file_mantis --genome $genome_fa -n $normal_bam -t ${tumour_bam} -o ${tumour_bam.baseName}.mantis
     """
 }
 
